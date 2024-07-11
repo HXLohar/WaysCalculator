@@ -1,0 +1,23 @@
+Reels: 6 # Reel size, between 3-6
+Max_Size_Per_Reel: 8 # Max symbols on a single reel, between 2-12
+High: 4 # Number of high value symbols (0-6)
+Medium: 4 # Number of medium value symbols (0-6)
+Low: 4 # Number of low value symbols (0-6)
+# sum of all 3 value above should be in between 5 and 15.
+Low_Alias: True # True: use A/K/Q/... instead of L1/L2/L3...
+Reel_Offset: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 # Reel offset. Example, a 0.5 means the entire reel is moved down by half a block.
+H1: 0, 0, 150, 300, 400, 500
+H2: 0, 0, 100, 200, 250, 300
+H3: 0, 0, 75, 150, 200, 250
+H4: 0, 0, 50, 100, 150, 200
+M1: 0, 0, 20, 30, 50, 100
+M2: 0, 0, 20, 30, 50, 100
+M3: 0, 0, 15, 25, 40, 80
+M4: 0, 0, 15, 25, 40, 80
+L1: 0, 0, 10, 15, 20, 30
+L2: 0, 0, 10, 15, 20, 30
+L3: 0, 0, 10, 15, 20, 30
+L4: 0, 0, 10, 15, 20, 30
+
+
+

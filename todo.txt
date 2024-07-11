@@ -1,0 +1,4 @@
+Implement Both Ways calculation
+Implement Reel setup (symbols on different reels). Example: A setup ot 2-4-4-4-2 means 2 symbols (blocks) on reel 1, 4 symbols on reel 2-4, and 2 symbols on reel 5.
+Implement Wild ways pays
+Include more config files
