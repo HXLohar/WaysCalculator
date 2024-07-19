@@ -223,6 +223,9 @@ class window:
                         group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
                         group.label.delete(0, tk.END)
                         group.label.insert(0, "1")
+                        # set self.symbol and multiplier for that block to default
+                        self.symbols[group.reel_id][group.Y_position] = ""
+                        self.multipliers[group.reel_id][group.Y_position] = 1
         # if param is "W", clear all W symbols and multipliers
         elif param == "W":
             for obj in self.groups:
@@ -232,6 +235,8 @@ class window:
                         group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
                         group.label.delete(0, tk.END)
                         group.label.insert(0, "1")
+                        self.symbols[group.reel_id][group.Y_position] = ""
+                        self.multipliers[group.reel_id][group.Y_position] = 1
         # if param is "non W", clear all non W symbols and multipliers
         elif param == "non W":
             for obj in self.groups:
@@ -241,6 +246,8 @@ class window:
                         group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
                         group.label.delete(0, tk.END)
                         group.label.insert(0, "1")
+                        self.symbols[group.reel_id][group.Y_position] = ""
+                        self.multipliers[group.reel_id][group.Y_position] = 1
     def init_middle_left(self):
         # Define the area for the middle left
         area2 = tk.Frame(self.window, width=700, height=450)

@@ -53,7 +53,7 @@ class config:
                 if line.startswith('Reel_Setup:'):
                     # Reel_Setup: 2, 3, 3, 3, 2 means 5 reels with 2, 3, 3, 3, 2 symbols.
                     values = line.split(":")[1].split('#')[0].strip()
-                    self.reel_setup = [int(x) for x in values.split(',')]
+                    self.reel_setup = [int(x) for x in values.split('-')]
                     self.reels = len(self.reel_setup)
                     self.max_size_per_reel = max(self.reel_setup)
                     flag_setup_found = True
