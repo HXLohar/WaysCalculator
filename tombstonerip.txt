@@ -1,0 +1,23 @@
+Reels: 5 # Reel size, between 3-6
+Max_Size_Per_Reel: 3 # Max symbols on a single reel, between 2-12
+Reel_Setup: 2, 3, 3, 3, 2
+High: 5 # Number of high value symbols (0-6)
+Medium: 0 # Number of medium value symbols (0-6)
+Low: 5 # Number of low value symbols (0-6)
+# sum of all 3 value above should be in between 5 and 15.
+Low_Alias: True # True: use A/K/Q/... instead of L1/L2/L3...
+Reel_Offset: 0.5, 0.0, 0.0, 0.0, 0.5 # Reel offset. Example, a 0.5 means the entire reel is moved down by half a block.
+H1: 0, 0, 50, 80, 400
+H2: 0, 0, 40, 60, 350
+H3: 0, 0, 40, 50, 250
+H4: 0, 0, 30, 40, 150
+H5: 0, 0, 30, 40, 100
+L1: 0, 0, 20, 30, 90
+L2: 0, 0, 20, 30, 80
+L3: 0, 0, 10, 20, 70
+L4: 0, 0, 10, 20, 60
+L5: 0, 0, 10, 20, 50
+
+# Known issue
+# Symbol multiplier and global multiplier are added by default, and this is not the case for Tombstone Rip
+# Burning Wild on reel 5 + 3 OAKs winning unable to input, as only the 5 OAKs winning get the global + burning multiplier, the 3 OAKs winning only get the basic global multiplier

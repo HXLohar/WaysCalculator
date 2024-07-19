@@ -32,7 +32,7 @@ class config:
         self.low_alias = False
         self.symbols = []
         self.reel_offset = [0.0] * 6
-
+        self.reel_setup = []
         self.load_config()
         # print(self.reel_offset)
         self.check_config()
@@ -46,16 +46,23 @@ class config:
         else:
             self.symbol_list += [f'L{i + 1}' for i in range(self.low)]
 
-
-
-
     def load_config(self):
         with open(self.filename, 'r') as f:
+            flag_setup_found = False
             for line in f:
-                if line.startswith('Reels:'):
+                if line.startswith('Reel_Setup:'):
+                    # Reel_Setup: 2, 3, 3, 3, 2 means 5 reels with 2, 3, 3, 3, 2 symbols.
+                    values = line.split(":")[1].split('#')[0].strip()
+                    self.reel_setup = [int(x) for x in values.split(',')]
+                    self.reels = len(self.reel_setup)
+                    self.max_size_per_reel = max(self.reel_setup)
+                    flag_setup_found = True
+                    # print("The setup is: ", self.reel_setup)
+                elif line.startswith('Reels:') and not flag_setup_found:
                     self.reels = int(line.split()[1])
-                elif line.startswith('Max_Size_Per_Reel:'):
+                elif line.startswith('Max_Size_Per_Reel:') and not flag_setup_found:
                     self.max_size_per_reel = int(line.split()[1])
+                    self.reel_setup = [self.max_size_per_reel] * self.reels
                 elif line.startswith('High:'):
                     self.high = int(line.split()[1])
                 elif line.startswith('Medium:'):
@@ -115,16 +122,21 @@ class board_calculator:
         self.accumulated_wins = 0.0
         # check for each reel, which symbol(s) are present.
 
-        if self.check_if_symbol_exists("W"):
-            self.existing_symbols = ["W"]
         # check which symbol appeared on the board.
-        for symbol in self.symbol_list:
-            if self.check_if_symbol_exists(symbol):
-                self.existing_symbols.append(symbol)
+        for reel in self.board_list:
+            for symbol in reel:
+                if symbol not in self.existing_symbols and symbol != '':
+                    self.existing_symbols.append(symbol)
+
         # if the only symbol exists is W, then the board is a wild board.
         if len(self.existing_symbols) == 1 and self.existing_symbols[0] == "W":
             self.flag_wild_board = True
+            print("self.existing_symbols: ", self.existing_symbols)
+
+        else:
+            self.flag_wild_board = False
         self.calculations_string = []
+    # rest of the class methods...
     def update_symbol_list(self, symbol_list):
         self.symbol_list = symbol_list
 
@@ -133,19 +145,26 @@ class board_calculator:
         # print("Given board: ", self.board_list)
         for i in range(0, self.config_table.reels):
             if symbol in self.board_list[i]:
-                # print(f"Symbol {symbol} exists in reel {i + 1}")
                 return True
-        # print(f"Symbol {symbol} NOT exist in the board.")
         return False
 
     def calculate_payout(self):
         # print("Calculating payout...")
+        # print("Symbols found: ", self.existing_symbols)
+        # print("Wild board: ", self.flag_wild_board)
         self.accumulated_wins = 0
-
+        if self.flag_wild_board:
+            return_string, return_value = self.calculate_symbol_payout("H1", True)
+            self.calculations_string.append("W -> " + return_string)
+            self.accumulated_wins += return_value
+            joined_string = "\n".join(self.calculations_string)
+            joined_string = "\n".join([x for x in joined_string.split("\n") if x.strip() != ""])
+            return joined_string
         symbols_involved = []
         for symbol in self.symbol_list:
             if symbol == "W":
                 continue
+
             if self.check_if_symbol_exists(symbol):
                 symbols_involved.append(symbol)
 
@@ -166,7 +185,7 @@ class board_calculator:
         joined_string = "\n".join([x for x in joined_string.split("\n") if x.strip() != ""])
         return joined_string
 
-    def calculate_symbol_payout(self, symbol):
+    def calculate_symbol_payout(self, symbol, flag_wild_board_overwrite=False):
         flag_source_symbol_found = False
         payout_string = ""
 
@@ -188,7 +207,7 @@ class board_calculator:
             Ways *= symbol_appearance
             Ways_factor_list.append(symbol_appearance)
             OAKs += 1
-        if not flag_source_symbol_found:
+        if (not flag_source_symbol_found) and (not flag_wild_board_overwrite):
             return "", 0
         base_payout = self.config_table.get_payout(symbol, OAKs)
         payout = base_payout * Ways

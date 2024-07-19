@@ -59,8 +59,11 @@ class window:
         self.init_middle_left()
         self.init_bottom_left()
 
-        self.symbols = [[''] * self.config.max_size_per_reel for _ in range(self.config.reels)]
-        self.multipliers = [[1] * self.config.max_size_per_reel for _ in range(self.config.reels)]
+        self.symbols = []
+        self.multipliers = []
+        for i in range(0, self.config.reels):
+            self.symbols.append([""] * self.config.reel_setup[i])
+            self.multipliers.append([1] * self.config.reel_setup[i])
         # set the window title to file name
         self.window.title(f"Config file: {file_name}")
         self.init_bottom_right()
@@ -86,6 +89,7 @@ class window:
         # clicking it will call the calculate method, param = text_box
         button = tk.Button(area4, text="CALCULATE", font=("Helvetica", "16", "bold"), command=lambda: self.calculate(text_box))
         button.place(x=0, y=50, width=400, height=40)
+
     def calculate(self, output_text_box):
         high_multiplier_list = []
         # get the high multipliers from the text boxes
@@ -102,17 +106,22 @@ class window:
                 reel_id = group.reel_id
                 Y_position = group.Y_position
                 # get the text of the button
-                symbol_text = group.button.cget("text")
-                # get the text of the entry
-                entry_text = group.label.get()
+                if group.button is not None:
+                    symbol_text = group.button.cget("text")
+                if group.label is not None:
+                    entry_text = group.label.get()
                 # if the text is not a number or empty, set it to 1
                 if not entry_text.isdigit() or entry_text == "":
                     self.multipliers[reel_id][Y_position] = 1
                 else:
                     self.multipliers[reel_id][Y_position] = max(int(entry_text), 1)
                 # set the symbol to the symbol_text
-                self.symbols[reel_id][Y_position] = symbol_text
-        board_calculator = classes.board_calculator(self.symbols, self.multipliers, self.config, int(self.multiplier_textbox.get()),
+                # self.symbols[reel_id][Y_position] = symbol_text
+        # Reverse the order of symbols on each reel
+
+        # print("self.symbol", self.symbols)
+        board_calculator = classes.board_calculator(self.symbols, self.multipliers, self.config,
+                                                    int(self.multiplier_textbox.get()),
                                                     high_multiplier_list)
         board_calculator.update_symbol_list(self.config.symbol_list)
         # clear the text box first
@@ -121,9 +130,6 @@ class window:
         output_text_box.delete(1.0, tk.END)
         output_text_box.insert(tk.END, board_calculator.calculate_payout())
         output_text_box.config(state=tk.DISABLED)
-
-
-
     def remove_w_on_reel_1(self):
         button_default_bg = "#EEEEEE"
 
@@ -237,9 +243,15 @@ class window:
         area2 = tk.Frame(self.window, width=700, height=450)
         area2.place(x=0, y=200)
 
-        # Define the size of each group based on the number of reels
+        # Define the size of each group based on the number of reel
         group_width = {4: 130, 5: 100, 6: 85}[self.config.reels]
-        group_height = 380 / (self.config.max_size_per_reel + max(self.config.reel_offset))
+        # calculate the height (in symbols) of each reel, being that reel's offset + config.reel_setup[reel_id]
+        # group_height = 380 / (biggest value above)
+        reel_height = [self.config.reel_offset[i] + self.config.reel_setup[i] for i in range(self.config.reels)]
+        max_size_per_reel = max(reel_height)
+        # print("max_size_per_reel", max_size_per_reel)
+        group_height = 380 / max_size_per_reel
+        # group_height = 380 / (self.config.max_size_per_reel + max(self.config.reel_offset))
         # print(self.config.reel_offset)
 
         # Define the size of the button and text box
@@ -255,7 +267,7 @@ class window:
 
             y = 10 + self.config.reel_offset[i] * (group_height + 5)
 
-            for j in range(self.config.max_size_per_reel):
+            for j in range(self.config.reel_setup[i]):
                 # Calculate the position of the group
 
                 # Create the button
@@ -433,6 +445,7 @@ class window:
 
         Y_position = group.Y_position
         self.symbols[reel_id][Y_position] = symbol_text
+        # print("DEBUG: paint button called")
 
 
 
