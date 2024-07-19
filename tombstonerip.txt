@@ -19,5 +19,5 @@ L4: 0, 0, 10, 20, 60
 L5: 0, 0, 10, 20, 50
 
 # Known issue
-# Symbol multiplier and global multiplier are added by default, and this is not the case for Tombstone Rip
+# Symbol multiplier and global multiplier are multiplied by default, and this is not the case for Tombstone Rip
 # Burning Wild on reel 5 + 3 OAKs winning unable to input, as only the 5 OAKs winning get the global + burning multiplier, the 3 OAKs winning only get the basic global multiplier
