@@ -213,31 +213,34 @@ class window:
         menu.add_command(label="Clear All non W", command=lambda: self.reset_board("non W"))
         # display the menu
         menu.post(self.window.winfo_pointerx(), self.window.winfo_pointery())
+
     def reset_board(self, param=""):
         # if param is "all", clear all symbols and multipliers
         if param == "all":
             for obj in self.groups:
-                for group in obj:
-                    group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
-                    group.label.delete(0, tk.END)
-                    group.label.insert(0, "1")
+                for index, group in enumerate(obj):
+                    if group.button is not None and index < self.config.reel_setup[group.reel_id]:
+                        group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
+                        group.label.delete(0, tk.END)
+                        group.label.insert(0, "1")
         # if param is "W", clear all W symbols and multipliers
         elif param == "W":
             for obj in self.groups:
-                for group in obj:
-                    if group.button.cget("text") == "W":
+                for index, group in enumerate(obj):
+                    if group.button is not None and group.button.cget("text") == "W" and index < self.config.reel_setup[
+                        group.reel_id]:
                         group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
                         group.label.delete(0, tk.END)
                         group.label.insert(0, "1")
         # if param is "non W", clear all non W symbols and multipliers
         elif param == "non W":
             for obj in self.groups:
-                for group in obj:
-                    if group.button.cget("text") != "W":
+                for index, group in enumerate(obj):
+                    if group.button is not None and group.button.cget("text") != "W" and index < self.config.reel_setup[
+                        group.reel_id]:
                         group.button.config(text="", font=("Helvetica", "16", "bold"), bg="#EEEEEE", fg="#000000")
                         group.label.delete(0, tk.END)
                         group.label.insert(0, "1")
-
     def init_middle_left(self):
         # Define the area for the middle left
         area2 = tk.Frame(self.window, width=700, height=450)
