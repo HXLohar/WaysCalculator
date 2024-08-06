@@ -48,8 +48,9 @@ class window:
         self.multiplier_textbox = None
 
 
-        self.groups = [[symbol_button_label_group() for _ in range(self.config.max_size_per_reel)] for _ in range(self.config.reels)]
-        # self.groups = [[symbol_button_label_group(i) for i in range(self.config.reels)] for _ in range(self.config.max_size_per_reel)]
+        # self.groups = [[symbol_button_label_group() for _ in range(self.config.max_size_per_reel)] for _ in range(self.config.reels)]
+        self.groups = [[symbol_button_label_group() for _ in range(self.config.reel_setup[i])] for i in
+                       range(self.config.reels)]
 
         self.select_symbol_buttons = []
         self.select_symbol_entry = []
@@ -90,6 +91,11 @@ class window:
         button = tk.Button(area4, text="CALCULATE", font=("Helvetica", "16", "bold"), command=lambda: self.calculate(text_box))
         button.place(x=0, y=50, width=400, height=40)
 
+    def assign_multiplier(self, reel_id, Y_position, entry_text):
+        if not entry_text.isdigit() or entry_text == "":
+            self.multipliers[reel_id][Y_position] = 1
+        else:
+            self.multipliers[reel_id][Y_position] = max(int(entry_text), 1)
     def calculate(self, output_text_box):
         high_multiplier_list = []
         # get the high multipliers from the text boxes
@@ -111,10 +117,8 @@ class window:
                 if group.label is not None:
                     entry_text = group.label.get()
                 # if the text is not a number or empty, set it to 1
-                if not entry_text.isdigit() or entry_text == "":
-                    self.multipliers[reel_id][Y_position] = 1
-                else:
-                    self.multipliers[reel_id][Y_position] = max(int(entry_text), 1)
+                self.assign_multiplier(reel_id, Y_position, entry_text)
+
                 # set the symbol to the symbol_text
                 # self.symbols[reel_id][Y_position] = symbol_text
         # Reverse the order of symbols on each reel

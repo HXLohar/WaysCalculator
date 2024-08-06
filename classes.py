@@ -159,6 +159,7 @@ class board_calculator:
             self.accumulated_wins += return_value
             joined_string = "\n".join(self.calculations_string)
             joined_string = "\n".join([x for x in joined_string.split("\n") if x.strip() != ""])
+            joined_string += f"\nTotal Win: {self.accumulated_wins:,} coins / {self.accumulated_wins / 100:,.2f} x"
             return joined_string
         symbols_involved = []
         for symbol in self.symbol_list:

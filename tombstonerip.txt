@@ -1,6 +1,6 @@
 Reels: 5 # Reel size, between 3-6
 Max_Size_Per_Reel: 3 # Max symbols on a single reel, between 2-12
-Reel_Setup: 2, 3, 3, 3, 2
+Reel_Setup: 2-3-3-3-2
 High: 5 # Number of high value symbols (0-6)
 Medium: 0 # Number of medium value symbols (0-6)
 Low: 5 # Number of low value symbols (0-6)

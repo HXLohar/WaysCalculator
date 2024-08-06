@@ -1,4 +1,4 @@
-Reel_Setup: 2, 4, 4, 4, 2
+Reel_Setup: 2-4-4-4-2
 High: 5 # Number of high value symbols (0-6)
 Medium: 0 # Number of medium value symbols (0-6)
 Low: 5 # Number of low value symbols (0-6)
